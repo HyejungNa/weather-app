@@ -1,10 +1,11 @@
 import React from 'react';
+import ClipLoader from 'react-spinners/ClipLoader'; // Import ClipLoader
 
-const WeatherBox = ({ weather }) => {
+const WeatherBox = ({ weather, loading }) => {
   // console.log(weather);
 
-  if (!weather || !weather.main) {
-    return <div>Loading weather data...</div>;
+  if (loading || !weather || !weather.main) {
+    return <ClipLoader color='#f88c6b' loading={loading} size={150} />;
   }
 
   const fahrenheit = weather?.main.temp * 1.8 + 32;

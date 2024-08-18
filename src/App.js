@@ -7,8 +7,9 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 function App() {
   const [weather, setWeather] = useState(null);
-  const [city, setCity] = useState('');
+  const [city, setCity] = useState('melbourne');
   const [loading, setLoading] = useState(false);
+  const [apiError, setAPIError] = useState('');
   const cities = ['paris', 'new york', 'tokyo', 'seoul'];
 
   const getCurrentLocation = () => {
@@ -20,22 +21,33 @@ function App() {
   };
 
   const getWeatherByCurrentLocation = async (lat, lon) => {
-    let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=d4d6be8beaba2b686ca915803de9815b&units=metric
-`;
-    setLoading(true);
-    let response = await fetch(url);
-    let data = await response.json();
-    setWeather(data);
-    setLoading(false);
+    try {
+      let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=d4d6be8beaba2b686ca915803de9815b&units=metric
+      `;
+      setLoading(true);
+      let response = await fetch(url);
+      let data = await response.json();
+      setWeather(data);
+      setLoading(false);
+    } catch (err) {
+      setAPIError(err.message);
+      setLoading(false);
+    }
   };
 
   const getWeatherByCity = async () => {
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=d4d6be8beaba2b686ca915803de9815b&units=metric`;
-    setLoading(true);
-    let response = await fetch(url);
-    let data = await response.json();
-    setWeather(data);
-    setLoading(false);
+    try {
+      let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=d4d6be8beaba2b686ca915803de9815b&units=metric`;
+      setLoading(true);
+      let response = await fetch(url);
+      let data = await response.json();
+      setWeather(data);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+      setAPIError(err.message);
+      setLoading(false);
+    }
   };
 
   const handleCityChange = (city) => {
@@ -47,12 +59,22 @@ function App() {
   };
 
   useEffect(() => {
-    if (city === '') {
+    if (city == null) {
+      setLoading(true);
       getCurrentLocation();
     } else {
+      setLoading(true);
       getWeatherByCity();
     }
   }, [city]);
+
+  // useEffect(() => {
+  //   if (city === '') {
+  //     getCurrentLocation();
+  //   } else {
+  //     getWeatherByCity();
+  //   }
+  // }, [city]);
 
   return (
     <div>
@@ -60,7 +82,7 @@ function App() {
         <div className='container'>
           <ClipLoader color='#f88c6b' loading={loading} size={150} />
         </div>
-      ) : (
+      ) : !apiError ? (
         <div className='container'>
           <WeatherBox weather={weather} />
           <WeatherButton
@@ -70,6 +92,8 @@ function App() {
             selectedCity={city}
           />
         </div>
+      ) : (
+        apiError
       )}
     </div>
   );
