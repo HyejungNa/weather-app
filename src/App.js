@@ -58,23 +58,25 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    if (city == null) {
-      setLoading(true);
-      getCurrentLocation();
-    } else {
-      setLoading(true);
-      getWeatherByCity();
-    }
-  }, [city]);
-
   // useEffect(() => {
-  //   if (city === '') {
+  //   if (city == null) {
+  //     setLoading(true);
   //     getCurrentLocation();
   //   } else {
+  //     setLoading(true);
   //     getWeatherByCity();
   //   }
   // }, [city]);
+  //    melbourne default 날씨 없이 사용시 맨처음 화면에 현재위치날씨 데이터가 받아지지않음
+
+  useEffect(() => {
+    if (city === '') {
+      getCurrentLocation();
+    } else {
+      getWeatherByCity();
+    }
+  }, [city]);
+  //    melbourne default 날씨 없이 사용시 current location버튼 클릭시 현재위치날씨 데이터가 받아지지않음
 
   return (
     <div>
