@@ -1,23 +1,29 @@
-import { useEffect, useState } from 'react';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import WeatherBox from './components/WeatherBox';
-import WeatherButton from './components/WeatherButton';
-import ClipLoader from 'react-spinners/ClipLoader';
+import { useEffect, useState } from "react";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import WeatherBox from "./components/WeatherBox";
+import WeatherButton from "./components/WeatherButton";
+import ClipLoader from "react-spinners/ClipLoader";
 
 function App() {
   const [weather, setWeather] = useState(null);
-  const [city, setCity] = useState('melbourne');
+  const [city, setCity] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [apiError, setAPIError] = useState('');
-  const cities = ['paris', 'new york', 'tokyo', 'seoul'];
+  const [apiError, setAPIError] = useState("");
+  const cities = ["paris", "new york", "tokyo", "seoul"];
 
   const getCurrentLocation = () => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-      getWeatherByCurrentLocation(lat, lon);
-    });
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        getWeatherByCurrentLocation(lat, lon);
+      },
+      (err) => {
+        setAPIError("Location access denied or unavailable.");
+        setLoading(false);
+      }
+    );
   };
 
   const getWeatherByCurrentLocation = async (lat, lon) => {
@@ -51,7 +57,7 @@ function App() {
   };
 
   const handleCityChange = (city) => {
-    if (city === 'current') {
+    if (city === "current") {
       setCity(null);
     } else {
       setCity(city);
@@ -70,7 +76,7 @@ function App() {
   //    melbourne default 날씨 없이 사용시 맨처음 화면에 현재위치날씨 데이터가 받아지지않음
 
   useEffect(() => {
-    if (city === '') {
+    if (city === null) {
       getCurrentLocation();
     } else {
       getWeatherByCity();
@@ -81,11 +87,11 @@ function App() {
   return (
     <div>
       {loading ? (
-        <div className='container'>
-          <ClipLoader color='#f88c6b' loading={loading} size={150} />
+        <div className="container">
+          <ClipLoader color="#f88c6b" loading={loading} size={150} />
         </div>
       ) : !apiError ? (
-        <div className='container'>
+        <div className="container">
           <WeatherBox weather={weather} />
           <WeatherButton
             cities={cities}
