@@ -1,5 +1,5 @@
 body {
-  background: url('./assets/weather-image.jpg');
+  background: url("./assets/weather-image.jpg");
   background-size: cover;
   height: 100vh;
 }
@@ -27,4 +27,11 @@ body {
 
 .weather-button-box .btn:last-child {
   margin-right: 0;
+}
+
+@media (max-width: 576px) {
+  .weather-button-box {
+    display: flex;
+    width: auto;
+  }
 }

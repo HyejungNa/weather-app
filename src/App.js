@@ -50,7 +50,7 @@ function App() {
       setWeather(data);
       setLoading(false);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       setAPIError(err.message);
       setLoading(false);
     }
@@ -82,7 +82,6 @@ function App() {
       getWeatherByCity();
     }
   }, [city]);
-  //    melbourne default 날씨 없이 사용시 current location버튼 클릭시 현재위치날씨 데이터가 받아지지않음
 
   return (
     <div>
